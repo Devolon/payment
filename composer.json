@@ -1,0 +1,53 @@
+{
+    "name": "devolon/payment",
+    "description": "Devolon Payment provides payment functionality for a Laravel application",
+    "keywords": ["laravel", "payment"],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "laravel/framework": "^8.12",
+        "devolon/common": "*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.4.2",
+        "orchestra/testbench-core": "^6.23",
+        "phpunit/phpunit": "^9.3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Devolon\\Payment\\": "src/",
+            "Devolon\\Payment\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Devolon\\Payment\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Devolon technical team",
+            "homepage": "https://www.devolon.fi"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Devolon\\Payment\\DevolonPaymentServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../common",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "dev"
+}
