@@ -39,11 +39,8 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "../common",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "https://github.com/Devolon/laravel-common"
         }
     ],
     "config": {
