@@ -2,6 +2,7 @@
 
 namespace Devolon\Payment\Tests;
 
+use Devolon\Common\CommonServiceProvider;
 use Devolon\Payment\DevolonPaymentServiceProvider;
 use Devolon\Payment\Payment;
 use Illuminate\Contracts\Config\Repository;
@@ -64,7 +65,7 @@ abstract class PaymentTestCase extends TestCase
 
     protected function getPackageProviders($app)
     {
-        return [DevolonPaymentServiceProvider::class];
+        return [DevolonPaymentServiceProvider::class, CommonServiceProvider::class];
     }
 
     /**

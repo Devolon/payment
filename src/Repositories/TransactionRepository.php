@@ -34,7 +34,7 @@ class TransactionRepository extends Repository
         return $transaction->product()->exists();
     }
 
-    protected function model(): string
+    public function model(): string
     {
         return Transaction::class;
     }

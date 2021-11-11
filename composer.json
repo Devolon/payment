@@ -6,7 +6,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "laravel/framework": "^8.12",
-        "devolon/laravel-common": "*"
+        "devolon/laravel-common": "^2.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.2",

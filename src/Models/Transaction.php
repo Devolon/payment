@@ -3,6 +3,7 @@
 namespace Devolon\Payment\Models;
 
 use Carbon\Carbon;
+use Devolon\Common\Traits\RepositoryRouteBinding;
 use Devolon\Payment\Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Transaction extends Model
 {
     use HasFactory;
+    use RepositoryRouteBinding;
 
     public const STATUS_IN_PROCESS = 'in_process';
     public const STATUS_DONE = 'done';

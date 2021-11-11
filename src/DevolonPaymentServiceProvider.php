@@ -2,7 +2,9 @@
 
 namespace Devolon\Payment;
 
+use Devolon\Common\Bases\Repository;
 use Devolon\Payment\Contracts\PaymentGatewayInterface;
+use Devolon\Payment\Repositories\TransactionRepository;
 use Devolon\Payment\Services\PaymentGatewayDiscoveryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -11,6 +13,7 @@ class DevolonPaymentServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->app->tag(TransactionRepository::class, Repository::class);
         $this->app->singleton(PaymentGatewayDiscoveryService::class, function (Application $application) {
             /** @var PaymentGatewayInterface[] $gateways */
             $paymentGateways = $application->tagged(PaymentGatewayInterface::class);
