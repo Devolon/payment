@@ -79,4 +79,29 @@
  *         )
  *     ),
  * )
+ *
+ * @OA\RequestBody (
+ *     request="PaymentChangeTransactionStatusRequestBody",
+ *     required=true,
+ *     description="Change transaction status request body",
+ *     @OA\JsonContent(ref="#/components/schemas/PaymentChangeTransactionStatusRequest")
+ * )
+ *
+ * @OA\Schema (
+ *     schema="PaymentChangeTransactionStatusRequest",
+ *     required={"value"},
+ *     @OA\Property(property="value", type="string", maxLength=255, example="failed", enum={"failed", "done"}),
+ * )
+ *
+ * @OA\Schema (
+ *     schema="InvalidChangeTransactionStatusRequest",
+ *     @OA\Property(
+ *         property="value",
+ *         type="array",
+ *         @OA\Items(
+ *             type="string",
+ *             example={"status is not valid."},
+ *         )
+ *     ),
+ * )
  */

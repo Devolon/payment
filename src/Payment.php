@@ -37,6 +37,19 @@ class Payment
         });
     }
 
+    public static function administrationRoutes(array $options = [])
+    {
+        $defaultOptions = [
+            'namespace' => '\Devolon\Payment',
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        Route::group($options, function ($router) {
+            (new RouteRegistrar($router))->administrationRoutes();
+        });
+    }
+
     // todo It should be better if we remove this part from this class
 
     public static function addProductType(string $productTypeClass): void

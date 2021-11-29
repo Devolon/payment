@@ -2,6 +2,7 @@
 
 namespace Devolon\Payment\Tests\Unit\Services;
 
+use Devolon\Payment\Contracts\CanRefund;
 use Devolon\Payment\Services\PaymentGatewayDiscoveryService;
 use Devolon\Payment\Contracts\PaymentGatewayInterface;
 use Devolon\Payment\Tests\PaymentTestCase;
@@ -62,6 +63,26 @@ class PaymentGatewayDiscoveryServiceTest extends PaymentTestCase
         $this->assertEquals([$firstGatewayName, $secondGatewayName], $result);
     }
 
+    public function testGetGatewaysWithRefundReturnsNameOfAllPaymentGatewaysWhichCanRefund(): void
+    {
+        // Arrange
+        $firstGatewayName = $this->faker->word;
+        $firstGateway = $this->mockPaymentGateway();
+        $secondGatewayName = $this->faker->word;
+        $secondGateway = $this->mockPaymentGateway(CanRefund::class);
+        $gateways = [
+            $firstGatewayName => $firstGateway,
+            $secondGatewayName => $secondGateway,
+        ];
+        $service = new PaymentGatewayDiscoveryService($gateways);
+
+        // Act
+        $result = $service->getGatewaysWithRefund();
+
+        // Assert
+        $this->assertEquals([$secondGatewayName], $result);
+    }
+
     public function provideData(): array
     {
         $faker = $this->makeFaker('en_US');
@@ -80,8 +101,8 @@ class PaymentGatewayDiscoveryServiceTest extends PaymentTestCase
         ];
     }
 
-    private function mockPaymentGateway(): MockInterface | PaymentGatewayInterface
+    private function mockPaymentGateway(string ...$interfaces): MockInterface | PaymentGatewayInterface
     {
-        return Mockery::mock(PaymentGatewayInterface::class);
+        return Mockery::mock(PaymentGatewayInterface::class, ...$interfaces);
     }
 }

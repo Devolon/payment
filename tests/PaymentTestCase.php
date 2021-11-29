@@ -22,11 +22,15 @@ abstract class PaymentTestCase extends TestCase
         parent::setUp();
 
         $this->artisan('migrate:fresh');
+        $publicRouteNamePrefix = config('payment.route_name_prefix.public');
 
-        // TODO: remove hardocding `app.` prefix
-        Route::group(['middleware' => 'bindings', 'as' => 'app.'], function () {
+        Route::group(['middleware' => 'bindings', 'as' => "$publicRouteNamePrefix."], function () {
             Payment::transactionRoutes([]);
             Payment::callbackRoutes([]);
+        });
+
+        Route::group(['middleware' => 'bindings', 'as' => "admin.", 'prefix' => 'admin'], function () {
+            Payment::administrationRoutes([]);
         });
 
         Schema::create('users', function (Blueprint $table) {
