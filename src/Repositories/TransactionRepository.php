@@ -29,6 +29,13 @@ class TransactionRepository extends Repository
             ->paginate($perPage);
     }
 
+    public function getPaginated(int $perPage = Setting::PAGE_SIZE): LengthAwarePaginator
+    {
+        return $this->query()
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
     public function hasProduct(Transaction $transaction): bool
     {
         return $transaction->product()->exists();

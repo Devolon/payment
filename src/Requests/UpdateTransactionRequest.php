@@ -16,7 +16,10 @@ class UpdateTransactionRequest extends Request
 {
     protected function postRules(): array
     {
-        $validStatuses = Arr::except(Transaction::STATUSES, Transaction::STATUS_IN_PROCESS);
+        $validStatuses = Arr::except(
+            Transaction::STATUSES,
+            [Transaction::STATUS_IN_PROCESS, Transaction::STATUS_REFUNDED]
+        );
 
         return [
             'status' => ['required', Rule::in($validStatuses)],

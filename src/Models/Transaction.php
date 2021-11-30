@@ -34,11 +34,13 @@ class Transaction extends Model
     public const STATUS_IN_PROCESS = 'in_process';
     public const STATUS_DONE = 'done';
     public const STATUS_FAILED = 'failed';
+    public const STATUS_REFUNDED = 'refunded';
 
     public const STATUSES = [
         self::STATUS_IN_PROCESS,
         self::STATUS_DONE,
         self::STATUS_FAILED,
+        self::STATUS_REFUNDED,
     ];
 
     protected $casts = [

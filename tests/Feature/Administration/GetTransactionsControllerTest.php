@@ -1,39 +1,32 @@
 <?php
 
-namespace Devolon\Payment\Tests\Feature;
+namespace Devolon\Payment\Tests\Feature\Administration;
 
 use Devolon\Common\Tools\Setting;
-use Devolon\Payment\Actions\GetUserTransactionListAction;
+use Devolon\Payment\Actions\Administration\GetTransactionListAction;
 use Devolon\Payment\Models\Transaction;
 use Devolon\Payment\Resources\TransactionCollection;
 use Devolon\Payment\Tests\PaymentTestCase;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Mockery\MockInterface;
 
-class GetUserTransactionsControllerTest extends PaymentTestCase
+class GetTransactionsControllerTest extends PaymentTestCase
 {
-    private const ROUTE_NAME = 'app.payment.transaction.index';
+    private const ROUTE_NAME = 'admin.payment.transaction.index';
 
-    /**
-     * @group app
-     * @group transaction
-     * @group route
-     * @group success
-     */
     public function testRoute()
     {
         // Act
         $result = route(self::ROUTE_NAME, [], false);
 
         // Assert
-        $this->assertEquals("/payment/transaction", $result);
+        $this->assertEquals("/admin/payment/transaction", $result);
     }
 
     public function testSuccess()
     {
         // Arrange
-        $user = $this->getUserClass()::factory()->create();
-        $transaction = Transaction::factory()->inProcess()->create(['payment_method' => 'dummy']);
+        $transaction = Transaction::factory()->create(['payment_method' => 'dummy']);
         $perPage = Setting::PAGE_SIZE;
         $mockedPaginatedList = new LengthAwarePaginator(
             [$transaction],
@@ -42,17 +35,17 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
             1,
         );
 
-        $getTransactionListAction = $this->mockGetUserTransactionListAction();
+        $getTransactionListAction = $this->mockGetTransactionListAction();
 
         // Expect
         $getTransactionListAction
             ->shouldReceive('__invoke')
-            ->withArgs([$user->id, $perPage])
+            ->withArgs([$perPage])
             ->once()
             ->andReturn($mockedPaginatedList);
 
         // Act
-        $response = $this->actingAs($user)->getJson(route(self::ROUTE_NAME));
+        $response = $this->getJson(route(self::ROUTE_NAME));
 
         // Assert
         $response
@@ -64,8 +57,8 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
             );
     }
 
-    private function mockGetUserTransactionListAction(): MockInterface
+    private function mockGetTransactionListAction(): MockInterface
     {
-        return $this->mock(GetUserTransactionListAction::class);
+        return $this->mock(GetTransactionListAction::class);
     }
 }

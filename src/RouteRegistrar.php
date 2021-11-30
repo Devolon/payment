@@ -38,4 +38,20 @@ class RouteRegistrar
             'as' => 'payment.callback',
         ]);
     }
+
+    public function administrationRoutes(): void
+    {
+        $this->router->put('payment/transaction/{transaction}/status', [
+            'uses' => 'Controllers\Administration\ChangeTransactionStatusController',
+            'as' => 'payment.transaction.status.update',
+        ]);
+        $this->router->get('payment/transaction', [
+            'uses' => 'Controllers\Administration\GetTransactionsController',
+            'as' => 'payment.transaction.index',
+        ])->middleware(Pagination::class);
+        $this->router->get('/payment/refund-gateway', [
+            'uses' => 'Controllers\Administration\GetRefundPaymentGatewaysController',
+            'as' => 'payment.refund-gateway.index',
+        ]);
+    }
 }

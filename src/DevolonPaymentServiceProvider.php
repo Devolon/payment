@@ -29,6 +29,11 @@ class DevolonPaymentServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/payment.php', 'payment');
+        $this->publishes([
+            __DIR__ . '/../config/payment.php' => config_path('payment.php')
+        ], 'payment-highway-config');
+
         $this->publishes([
             __DIR__ . '/Virtual/' => app_path('Virtuals/Payment')
         ], 'devolon-payment-swagger-documentation');
