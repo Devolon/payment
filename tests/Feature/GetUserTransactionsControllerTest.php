@@ -29,11 +29,6 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
         $this->assertEquals("/payment/transaction", $result);
     }
 
-    /**
-     * @group app
-     * @group ticket-instance
-     * @group success
-     */
     public function testSuccess()
     {
         // Arrange
@@ -47,10 +42,10 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
             1,
         );
 
-        $getUserTicketInstanceListAction = $this->mockGetUserTransactionListAction();
+        $getTransactionListAction = $this->mockGetUserTransactionListAction();
 
         // Expect
-        $getUserTicketInstanceListAction
+        $getTransactionListAction
             ->shouldReceive('__invoke')
             ->withArgs([$user->id, $perPage])
             ->once()

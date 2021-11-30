@@ -35,10 +35,10 @@ class GetTransactionsControllerTest extends PaymentTestCase
             1,
         );
 
-        $getUserTicketInstanceListAction = $this->mockGetTransactionListAction();
+        $getTransactionListAction = $this->mockGetTransactionListAction();
 
         // Expect
-        $getUserTicketInstanceListAction
+        $getTransactionListAction
             ->shouldReceive('__invoke')
             ->withArgs([$perPage])
             ->once()

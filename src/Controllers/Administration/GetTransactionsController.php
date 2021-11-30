@@ -12,14 +12,14 @@ use Illuminate\Http\Request;
  */
 class GetTransactionsController extends Controller
 {
-    public function __construct(private GetTransactionListAction $getUserTransactionListAction)
+    public function __construct(private GetTransactionListAction $getTransactionListAction)
     {
     }
 
     public function __invoke(Request $request): TransactionCollection
     {
-        $userTicketInstances = ($this->getUserTransactionListAction)($request->query('perPage'));
+        $transactions = ($this->getTransactionListAction)($request->query('perPage'));
 
-        return TransactionCollection::make($userTicketInstances);
+        return TransactionCollection::make($transactions);
     }
 }

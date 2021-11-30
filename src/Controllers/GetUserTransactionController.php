@@ -19,11 +19,11 @@ class GetUserTransactionController extends Controller
     public function __invoke(Request $request): TransactionCollection
     {
         $user = auth()->user();
-        $userTicketInstances = ($this->getUserTransactionListAction)(
+        $transactions = ($this->getUserTransactionListAction)(
             $user->getAuthIdentifier(),
             $request->query('perPage')
         );
 
-        return TransactionCollection::make($userTicketInstances);
+        return TransactionCollection::make($transactions);
     }
 }
