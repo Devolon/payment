@@ -28,7 +28,7 @@ class DummyGateway implements PaymentGatewayInterface, HasPurchaseData, HasUpdat
 
     public function getName(): string
     {
-        return self::NAME;
+        return static::NAME;
     }
 
     public function purchaseDataRules(): array

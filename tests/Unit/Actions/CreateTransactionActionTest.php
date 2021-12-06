@@ -24,12 +24,12 @@ class CreateTransactionActionTest extends PaymentTestCase
     {
         // Arrange
         $transaction = Transaction::factory()->create();
-        $createTransactionDTO = new CreateTransactionDTO(
-            user_id: $transaction->user_id,
-            payment_method: $this->faker->word,
-            payment_method_data: [],
-            product_type: $this->faker->word,
-        );
+        $createTransactionDTO = CreateTransactionDTO::fromArray([
+            "user_id" => $transaction->user_id,
+            "payment_method" => $this->faker->word,
+            "payment_method_data" => [],
+            "product_type" => $this->faker->word,
+        ]);
         $purchaseResultDTO = new PurchaseResultDTO(
             should_redirect: true,
             redirect_to: new RedirectDTO(
@@ -76,12 +76,12 @@ class CreateTransactionActionTest extends PaymentTestCase
         // Arrange
         $transaction = Transaction::factory()->create();
         $mockedDoneTransaction = Transaction::factory()->create();
-        $createTransactionDTO = new CreateTransactionDTO(
-            user_id: $transaction->user_id,
-            payment_method: $this->faker->word,
-            payment_method_data: [],
-            product_type: $this->faker->word,
-        );
+        $createTransactionDTO = CreateTransactionDTO::fromArray([
+            "user_id" => $transaction->user_id,
+            "payment_method" => $this->faker->word,
+            "payment_method_data" => [],
+            "product_type" => $this->faker->word,
+        ]);
         $purchaseResultDTO = new PurchaseResultDTO(
             should_redirect: false,
             redirect_to: null,

@@ -4,8 +4,10 @@ namespace Devolon\Payment;
 
 use Devolon\Common\Bases\Repository;
 use Devolon\Payment\Contracts\PaymentGatewayInterface;
+use Devolon\Payment\Contracts\ProductTypeInterface;
 use Devolon\Payment\Repositories\TransactionRepository;
 use Devolon\Payment\Services\PaymentGatewayDiscoveryService;
+use Devolon\Payment\Services\ProductTypeDiscoveryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,6 +16,7 @@ class DevolonPaymentServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->tag(TransactionRepository::class, Repository::class);
+
         $this->app->singleton(PaymentGatewayDiscoveryService::class, function (Application $application) {
             /** @var PaymentGatewayInterface[] $gateways */
             $paymentGateways = $application->tagged(PaymentGatewayInterface::class);
@@ -24,6 +27,18 @@ class DevolonPaymentServiceProvider extends ServiceProvider
             }
 
             return new PaymentGatewayDiscoveryService($gatewaysMap);
+        });
+
+        $this->app->singleton(ProductTypeDiscoveryService::class, function (Application $application) {
+            /** @var ProductTypeInterface[] $productTypes */
+            $productTypes = $application->tagged(ProductTypeInterface::class);
+
+            $productTypesMap = [];
+            foreach ($productTypes as $productType) {
+                $productTypesMap[$productType->getName()] = $productType;
+            }
+
+            return new ProductTypeDiscoveryService($productTypesMap);
         });
     }
 

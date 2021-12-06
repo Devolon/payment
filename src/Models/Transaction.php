@@ -46,6 +46,7 @@ class Transaction extends Model
     protected $casts = [
         'payment_method_data' => 'array',
         'gateway_results' => 'array',
+        'product_data' => 'array',
     ];
 
     public function product(): MorphTo

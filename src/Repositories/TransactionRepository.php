@@ -18,6 +18,7 @@ class TransactionRepository extends Repository
         'product_type',
         'product_id',
         'gateway_results',
+        'product_data',
     ];
 
     public function getPaginatedForUser(int $userId, int $perPage = Setting::PAGE_SIZE): LengthAwarePaginator
