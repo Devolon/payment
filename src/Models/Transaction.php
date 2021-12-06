@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int user_id
  * @property array payment_method_data
  * @property array gateway_results
+ * @property array product_data
  * @property string product_type
  * @property int product_id
  * @property Model product
