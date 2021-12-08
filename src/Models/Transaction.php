@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int user_id
  * @property array payment_method_data
  * @property array gateway_results
+ * @property array product_data
  * @property string product_type
  * @property int product_id
  * @property Model product
@@ -46,6 +47,7 @@ class Transaction extends Model
     protected $casts = [
         'payment_method_data' => 'array',
         'gateway_results' => 'array',
+        'product_data' => 'array',
     ];
 
     public function product(): MorphTo

@@ -18,15 +18,7 @@ class CreateTransactionController
 
     public function __invoke(CreateTransactionRequest $request): TransactionResultResource
     {
-        $user = auth()->user();
-        $createTransactionDTO = CreateTransactionDTO::fromArray(
-            array_merge(
-                $request->validated(),
-                [
-                    'user_id' => $user->id,
-                ],
-            )
-        );
+        $createTransactionDTO = $request->getCreateTransactionDTO();
 
         $transactionResultDTO = ($this->createTransactionAction)($createTransactionDTO);
 
