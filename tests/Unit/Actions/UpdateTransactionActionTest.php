@@ -42,6 +42,33 @@ class UpdateTransactionActionTest extends PaymentTestCase
         $this->assertEquals($transaction, $result);
     }
 
+    /**
+     * @testWith ["done"]
+     *           ["failed"]
+     */
+    public function testInvokeThrowsExceptionWhenStatusIsNotInProcess(string $status)
+    {
+        // Arrange
+        $makeTransactionDoneService = $this->mockMakeTransactionDoneService();
+        $transaction = Transaction::factory([
+            'status' => $status
+        ])->create();
+        $updateTransactionDTO = UpdateTransactionDTO::fromArray([
+            'status' => Transaction::STATUS_DONE,
+            'payment_method_data' => [
+                $this->faker->word => $this->faker->word,
+            ]
+        ]);
+        $action = $this->resolveAction();
+
+        // Expect
+        $this->expectException(\InvalidArgumentException::class);
+        $makeTransactionDoneService->shouldNotReceive('__invoke');
+
+        // Act
+        $action($transaction, $updateTransactionDTO);
+    }
+
     public function testInvokeMakeTransactionFailed()
     {
         // Arrange

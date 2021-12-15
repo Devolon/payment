@@ -8,6 +8,7 @@ use Devolon\Payment\Models\Transaction;
 use Devolon\Payment\Services\MakeTransactionDoneService;
 use Devolon\Payment\Services\MakeTransactionFailedService;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class UpdateTransactionAction
 {
@@ -19,6 +20,10 @@ class UpdateTransactionAction
 
     public function __invoke(Transaction $transaction, UpdateTransactionDTO $updateTransactionDTO): Transaction
     {
+        if ($transaction->status !== Transaction::STATUS_IN_PROCESS) {
+            throw new InvalidArgumentException();
+        }
+
         try {
             return match ($updateTransactionDTO->status) {
                 Transaction::STATUS_DONE => ($this->makeTransactionDoneService)(
