@@ -5,14 +5,23 @@ namespace Devolon\Payment;
 use Devolon\Common\Bases\Repository;
 use Devolon\Payment\Contracts\PaymentGatewayInterface;
 use Devolon\Payment\Contracts\ProductTypeInterface;
+use Devolon\Payment\Models\Transaction;
+use Devolon\Payment\Policies\TransactionPolicy;
 use Devolon\Payment\Repositories\TransactionRepository;
 use Devolon\Payment\Services\PaymentGatewayDiscoveryService;
 use Devolon\Payment\Services\ProductTypeDiscoveryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+
 
 class DevolonPaymentServiceProvider extends ServiceProvider
 {
+
+    protected $policies = [
+        Transaction::class => TransactionPolicy::class,
+    ];
+
     public function register()
     {
         $this->app->tag(TransactionRepository::class, Repository::class);
@@ -58,6 +67,7 @@ class DevolonPaymentServiceProvider extends ServiceProvider
         ], 'devolon-payment-migrations');
 
         $this->registerMigrations();
+        $this->registerPolicies();
     }
 
     /**
@@ -68,5 +78,12 @@ class DevolonPaymentServiceProvider extends ServiceProvider
     protected function registerMigrations()
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
+
+    public function registerPolicies()
+    {
+        foreach ($this->policies as $key => $value) {
+            Gate::policy($key, $value);
+        }
     }
 }
