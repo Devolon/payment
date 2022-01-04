@@ -1,13 +1,12 @@
 <?php
 
-namespace Devolon\Payment\Tests\Feature;
+namespace Devolon\Payment\Tests\Feature\Administration;
 
 use Devolon\Payment\Gateways\Dummy\DummyGateway;
 use Devolon\Payment\Models\Transaction;
 use Devolon\Payment\Contracts\PaymentGatewayInterface;
 use Devolon\Payment\Tests\PaymentTestCase;
-use Devolon\Payment\Actions\RefundTransactionAction;
-use Devolon\Payment\DTOs\UpdateTransactionDTO;
+use Devolon\Payment\Actions\Administration\RefundTransactionAction;
 use Devolon\Payment\Policies\TransactionPolicy;
 use Devolon\Payment\Resources\TransactionResource;
 use Illuminate\Foundation\Testing\WithFaker;

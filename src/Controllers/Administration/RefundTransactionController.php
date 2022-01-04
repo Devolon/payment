@@ -3,7 +3,7 @@
 namespace Devolon\Payment\Controllers\Administration;
 
 use Devolon\Payment\Models\Transaction;
-use Devolon\Payment\Actions\RefundTransactionAction;
+use Devolon\Payment\Actions\Administration\RefundTransactionAction;
 use Devolon\Payment\Resources\TransactionResource;
 use Illuminate\Support\Facades\Gate;
 
