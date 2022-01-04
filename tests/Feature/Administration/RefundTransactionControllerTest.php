@@ -17,7 +17,7 @@ class RefundTransactionControllerTest extends PaymentTestCase
 {
     use WithFaker;
 
-    private const ROUTE_NAME = 'app.payment.transaction.refund';
+    private const ROUTE_NAME = 'admin.payment.transaction.refund';
 
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class RefundTransactionControllerTest extends PaymentTestCase
         $result = route(self::ROUTE_NAME, ['transaction' => $transactionId], false);
 
         // Assert
-        $this->assertEquals("/payment/transaction/$transactionId/refund", $result);
+        $this->assertEquals("/admin/payment/transaction/$transactionId/refund", $result);
     }
 
     public function test404()

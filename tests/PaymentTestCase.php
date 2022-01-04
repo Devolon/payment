@@ -26,7 +26,6 @@ abstract class PaymentTestCase extends TestCase
 
         Route::group(['middleware' => 'bindings', 'as' => "$publicRouteNamePrefix."], function () {
             Payment::transactionRoutes([]);
-            Payment::administrationRoutes([]);
             Payment::callbackRoutes([]);
         });
 
