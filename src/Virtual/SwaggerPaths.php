@@ -170,6 +170,34 @@
  */
 
 /**
+ * @OA\Put (
+ *     path="/api/administration/payment/transaction/{transaction_id}/refund",
+ *     tags={"Payment Administration [Transaction]"},
+ *     operationId="payment.administration/transaction.refund",
+ *     summary="Refund transaction endpoint",
+ *     description="To refund any payment manually this endpoint should be called.",
+ *     @OA\Parameter(ref="#/components/parameters/TransactionID"),
+ *     @OA\Response (
+ *         response=200,
+ *         ref="#/components/responses/PaymentTransactionResourceResponse"
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         ref="#/components/responses/UnauthorizedResponse"
+ *     ),
+ *     @OA\Response(
+ *         response=403,
+ *         ref="#/components/responses/UnauthorizedResponse"
+ *     ),
+ *    security={
+ *         {"bearerAuth": {}}
+ *     }
+ * )
+ *
+ *
+ */
+
+/**
  * @OA\Get (
  *     path="/api/administration/payment/transaction",
  *     tags={"Payment Administration [Transaction]"},
