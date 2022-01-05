@@ -45,6 +45,10 @@ class RouteRegistrar
             'uses' => 'Controllers\Administration\ChangeTransactionStatusController',
             'as' => 'payment.transaction.status.update',
         ]);
+        $this->router->put('payment/transaction/{transaction}/refund', [
+            'uses' => 'Controllers\Administration\RefundTransactionController',
+            'as' => 'payment.transaction.refund',
+        ]);
         $this->router->get('payment/transaction', [
             'uses' => 'Controllers\Administration\GetTransactionsController',
             'as' => 'payment.transaction.index',
