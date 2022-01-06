@@ -47,7 +47,7 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
         // Expect
         $getTransactionListAction
             ->shouldReceive('__invoke')
-            ->withArgs([$user->id, $perPage])
+            ->withArgs([$user->id, $perPage, null])
             ->once()
             ->andReturn($mockedPaginatedList);
 
@@ -62,6 +62,96 @@ class GetUserTransactionsControllerTest extends PaymentTestCase
                     ->response()
                     ->getData(true)
             );
+    }
+
+    /**
+     * @test
+     * @dataProvider validStatusesData
+     */
+    public function testSuccessWithStatuses($statuses)
+    {
+        // Arrange
+        $user = $this->getUserClass()::factory()->create();
+        $transaction = Transaction::factory()->inProcess()->create(['payment_method' => 'dummy']);
+        $perPage = Setting::PAGE_SIZE;
+        $mockedPaginatedList = new LengthAwarePaginator(
+            [$transaction],
+            10,
+            $perPage,
+            1,
+        );
+
+        $getTransactionListAction = $this->mockGetUserTransactionListAction();
+
+        // Expect
+        $getTransactionListAction
+            ->shouldReceive('__invoke')
+            ->withArgs([$user->id, $perPage, $statuses])
+            ->once()
+            ->andReturn($mockedPaginatedList);
+
+        // Act
+        $response = $this->actingAs($user)->getJson(route(self::ROUTE_NAME, compact('statuses')));
+
+        // Assert
+        $response
+            ->assertOk()
+            ->assertJson(
+                TransactionCollection::make($mockedPaginatedList)
+                    ->response()
+                    ->getData(true)
+            );
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidStatusesData
+     */
+    public function testUnexpextedEntity($statuses)
+    {
+        // Arrange
+        $user = $this->getUserClass()::factory()->create();
+        $transaction = Transaction::factory()->inProcess()->create(['payment_method' => 'dummy']);
+        $perPage = Setting::PAGE_SIZE;
+        $mockedPaginatedList = new LengthAwarePaginator(
+            [$transaction],
+            10,
+            $perPage,
+            1,
+        );
+
+        $getTransactionListAction = $this->mockGetUserTransactionListAction();
+
+        // Expect
+        $getTransactionListAction
+            ->shouldNotReceive('__invoke');
+
+        // Act
+        $response = $this->actingAs($user)->getJson(route(self::ROUTE_NAME, compact('statuses')));
+
+        // Assert
+        $response
+            ->assertUnprocessable();
+    }
+
+    public function invalidStatusesData(): array  
+    {
+        return [
+            'Not array value' => [
+                'statuses' => \collect(Transaction::STATUSES)->random(),
+            ],
+            'Not a statuses' => [
+                'statuses' => [Transaction::STATUS_DONE, \uniqid()],
+            ],
+        ];
+    }
+
+    public function validStatusesData(): array  
+    {
+        return array_merge(
+            array_map(fn($status) => [$status => [$status]], Transaction::STATUSES),
+            ['All statuses' => [Transaction::STATUSES]],
+        );
     }
 
     private function mockGetUserTransactionListAction(): MockInterface

@@ -18,7 +18,7 @@ class GetUserTransactionListActionTest extends PaymentTestCase
     /**
      * @dataProvider invokeDataProvider
      */
-    public function testInvoke(int $pageSize)
+    public function testInvoke(int $pageSize, ?array $statuses = null)
     {
         // Arrange
         $user = $this->getUserClass()::factory()->create();
@@ -34,12 +34,12 @@ class GetUserTransactionListActionTest extends PaymentTestCase
         // Expect
         $getUserTransactionsService
             ->shouldReceive('__invoke')
-            ->withArgs([$user->id, $pageSize])
+            ->withArgs([$user->id, $pageSize, $statuses])
             ->once()
             ->andReturn($transactionPaginator);
 
         // Act
-        $result = $action($user->id, $pageSize);
+        $result = $action($user->id, $pageSize, $statuses);
 
         // Assert
         $this->assertEquals($transactionPaginator, $result);
@@ -55,6 +55,10 @@ class GetUserTransactionListActionTest extends PaymentTestCase
             ],
             'non default page size' => [
                 $faker->numberBetween(10, 100),
+            ],
+            'with statuses' => [
+                Setting::PAGE_SIZE,
+                $faker->words(10),
             ],
         ];
     }
