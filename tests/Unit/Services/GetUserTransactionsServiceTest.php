@@ -46,6 +46,82 @@ class GetUserTransactionsServiceTest extends PaymentTestCase
         $this->assertEquals($ownedCount, $result->perPage());
     }
 
+    public function testInvokeWithStatus()
+    {
+        // Arrange
+        $service = $this->resolveService();
+        $user = $this->getUserClass()::factory()->create();
+        $ownedCount = $this->faker->numberBetween(2, 10);
+        $status = collect(Transaction::STATUSES)->random();
+        Transaction::factory()
+            ->count($ownedCount)
+            ->create([
+                'user_id' => $user->id,
+                'status' => $status,
+            ]);
+        Transaction::factory()
+            ->count($ownedCount)
+            ->create([ 'user_id' => $user->id, ]);
+        Transaction::factory()
+            ->count($ownedCount)
+            ->create();
+
+        // Act
+        $result = $service($user->id, $ownedCount, [$status]);
+
+        // Assert
+        $this->assertEquals(
+            Transaction::query()
+                ->where('user_id', $user->id)
+                ->where('status', $status)
+                ->count(),
+            $result->total()
+        );
+        $this->assertContainsOnlyInstancesOf(Transaction::class, $result);
+        $this->assertTrue($result->items()[0]->created_at > $result->items()[$ownedCount - 1]->created_at);
+        $this->assertEquals($ownedCount, $result->perPage());
+    }
+
+    public function testInvokeWithStatuses()
+    {
+        // Arrange
+        $service = $this->resolveService();
+        $user = $this->getUserClass()::factory()->create();
+        $ownedCount = $this->faker->numberBetween(2, 10);
+        $statuses = collect(Transaction::STATUSES)->random($this->faker->numberBetween(2, 4))->toArray();
+
+        foreach($statuses as $status) {
+            Transaction::factory()
+                ->count($ownedCount)
+                ->create([
+                    'user_id' => $user->id,
+                    'status' => $status,
+                ]);
+        }
+
+        Transaction::factory()
+            ->count($ownedCount)
+            ->create([ 'user_id' => $user->id, ]);
+        Transaction::factory()
+            ->count($ownedCount)
+            ->create();
+
+        // Act
+        $result = $service($user->id, $ownedCount, $statuses);
+
+        // Assert
+        $this->assertEquals(
+            Transaction::query()
+                ->where('user_id', $user->id)
+                ->whereIn('status', $statuses)
+                ->count(),
+            $result->total()
+        );
+        $this->assertContainsOnlyInstancesOf(Transaction::class, $result);
+        $this->assertTrue($result->items()[0]->created_at > $result->items()[$ownedCount - 1]->created_at);
+        $this->assertEquals($ownedCount, $result->perPage());
+    }
+
     private function resolveService(): GetUserTransactionsService
     {
         return resolve(GetUserTransactionsService::class);
