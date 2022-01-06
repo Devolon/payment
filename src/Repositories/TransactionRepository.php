@@ -5,6 +5,7 @@ namespace Devolon\Payment\Repositories;
 use Devolon\Common\Bases\Repository;
 use Devolon\Common\Tools\Setting;
 use Devolon\Payment\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TransactionRepository extends Repository
@@ -21,12 +22,16 @@ class TransactionRepository extends Repository
         'product_data',
     ];
 
-    public function getPaginatedForUser(int $userId, int $perPage = Setting::PAGE_SIZE): LengthAwarePaginator
+    public function getPaginatedForUser(int $userId, int $perPage = Setting::PAGE_SIZE, ?array $statuses = null): LengthAwarePaginator
     {
         return $this->query()
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
-            ->where('status', Transaction::STATUS_DONE)
+            ->when(
+                !$statuses,
+                fn(Builder $q) => $q->where('status', Transaction::STATUS_DONE),
+                fn(Builder $q) => $q->whereIn('status', $statuses),
+            )
             ->paginate($perPage);
     }
 

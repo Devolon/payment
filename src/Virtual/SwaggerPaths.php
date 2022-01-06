@@ -47,6 +47,7 @@
  *     description="this end point will return all user transaction information.",
  *     @OA\Parameter(ref="#/components/parameters/PerPage"),
  *     @OA\Parameter(ref="#/components/parameters/Page"),
+ *     @OA\Parameter(ref="#/components/parameters/Statuses"),
  *     @OA\Response(
  *         response=200,
  *         ref="#/components/responses/PaymentTransactionCollectionResponse"

@@ -12,8 +12,8 @@ class GetUserTransactionsService
     {
     }
 
-    public function __invoke(int $userId, int $perPage = Setting::PAGE_SIZE): LengthAwarePaginator
+    public function __invoke(int $userId, int $perPage = Setting::PAGE_SIZE, ?array $statuses = null): LengthAwarePaginator
     {
-        return $this->transactionRepository->getPaginatedForUser($userId, $perPage);
+        return $this->transactionRepository->getPaginatedForUser($userId, $perPage, $statuses);
     }
 }
